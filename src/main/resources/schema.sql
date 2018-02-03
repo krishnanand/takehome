@@ -1,0 +1,1 @@
+CREATE TABLE IF NOT EXISTS Person(first_name VARCHAR(20), last_name VARCHAR(20), person_id varchar(10), PRIMARY KEY(person_id));CREATE INDEX IF NOT EXISTS person_id_index on Person(person_id);CREATE INDEX IF NOT EXISTS person_last_name_index on Person(last_name);

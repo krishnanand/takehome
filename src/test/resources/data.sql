@@ -1,0 +1,1 @@
+INSERT INTO Person(person_id, first_name, last_name) VALUES('ABCDE12345', 'Jane', 'Doe');INSERT INTO Person(person_id, first_name, last_name) VALUES('A1B2C3D4E5', 'John', 'Doe');
