@@ -94,14 +94,30 @@ public class PersonServiceIntegrationTest {
   
   @Test
   public void testDeleteByPersonId() throws Exception {
+    // Checking that record exists.
+    Person person = new Person();
+    person.setFirstName("Jane");
+    person.setLastName("Doe");
+    String personId = "ABCDE12345";
+    Person personFromDb = this.fetchPersonById(personId);
+    Assert.assertEquals(person, personFromDb);
+    
+    // Deleting from db.
     PersonDeleteResponse actual = this.personService.deletePersonById("ABCDE12345");
     PersonDeleteResponse expected = new PersonDeleteResponse();
     expected.setDeleteSuccess(true);
     Assert.assertEquals(expected, actual);
+    
+    // Checking that the record is deleted.
+    Assert.assertNull(this.fetchPersonById(personId));
   }
   
   @Test
   public void testDeleteByPersonId_MissingId() throws Exception {
+    // Checking no record exists.
+    Assert.assertNull(this.fetchPersonById(""));
+    
+    // Nothing to be deleted.
     PersonDeleteResponse actual = this.personService.deletePersonById("");
     PersonDeleteResponse expected = new PersonDeleteResponse();
     expected.addError(404, "No record was found.");
