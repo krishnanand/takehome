@@ -1,7 +1,5 @@
 package com.krishnanand.rest;
 
-import java.util.List;
-
 /**
  * Strategy definition of data access layer to insert person details into the database.
  * 
