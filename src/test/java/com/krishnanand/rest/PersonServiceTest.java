@@ -38,6 +38,14 @@ public class PersonServiceTest {
   }
   
   @Test
+  public void testCreatePerson_NoRecord() throws Exception {
+    PersonCredentials actual = ps.createPerson(null);
+    PersonCredentials expected = new PersonCredentials();
+    expected.addError(400, "No record was found.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
   public void testFindPersonByPersonId_Success() throws Exception {
     Person expected = new Person();
     expected.setFirstName("First");

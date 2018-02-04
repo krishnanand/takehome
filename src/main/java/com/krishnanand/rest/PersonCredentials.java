@@ -1,10 +1,19 @@
 package com.krishnanand.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * An instance of this class encapsulates the person id representing a person entity.
  * @author krishnanand (Kartik Krishnanand)
  */
-public class PersonCredentials {
+public class PersonCredentials implements IError {
+  
+  private List<IError.Error> errors;
+  
+  public PersonCredentials() {
+    this.errors = new ArrayList<>();
+  }
   
   private String personId;
 
@@ -40,14 +49,28 @@ public class PersonCredentials {
         (this.personId != null && this.personId.equals(other.getPersonId()));
   }
 
+  public void setErrors(List<IError.Error> errors) {
+    this.errors = errors;
+  }
+
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    builder.append("PersonCredentials [personId=");
+    builder.append("PersonCredentials [errors=");
+    builder.append(errors);
+    builder.append(", personId=");
     builder.append(personId);
     builder.append("]");
     return builder.toString();
   }
+
+  @Override
+  public List<Error> getErrors() {
+    return null;
+  }
+
+  @Override
+  public void addError(int code, String message) {}
   
   
   

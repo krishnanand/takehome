@@ -49,7 +49,7 @@ public class ControllerTest {
   
   @Test
   public void testHelloWorld() throws Exception {
-    this.mockMvc.perform(MockMvcRequestBuilders.get("/helloworld")).
+    this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/helloworld")).
         andExpect(MockMvcResultMatchers.status().isOk()).
         andExpect(MockMvcResultMatchers.content().string("Hello World"));
   }
@@ -57,7 +57,7 @@ public class ControllerTest {
   @Test
   public void testMostFrequentWords() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/frequentwords").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/frequentwords").
             contentType(MediaType.APPLICATION_JSON_UTF8).content(this.readParagraphFromFile())).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
@@ -70,7 +70,7 @@ public class ControllerTest {
   @Test
   public void testMostFrequentWords_MissingParagraph() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/frequentwords").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/frequentwords").
             contentType(MediaType.APPLICATION_JSON_UTF8)).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
@@ -86,7 +86,7 @@ public class ControllerTest {
   @Test
   public void testFibonacciForZeroNumber() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/fibonacci").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/fibonacci").
             contentType(MediaType.APPLICATION_JSON_UTF8).param("n", "0")).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
@@ -98,7 +98,7 @@ public class ControllerTest {
   @Test
   public void testFibonacciForOneNumber() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/fibonacci").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/fibonacci").
             contentType(MediaType.APPLICATION_JSON_UTF8).param("n", "1")).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
@@ -110,7 +110,7 @@ public class ControllerTest {
   @Test
   public void testFibonacciForTwoNumbers() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/fibonacci").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/fibonacci").
             contentType(MediaType.APPLICATION_JSON_UTF8).param("n", "2")).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
@@ -122,7 +122,7 @@ public class ControllerTest {
   @Test
   public void testFibonacciFor10Numbers() throws Exception {
     MvcResult result = 
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/fibonacci").
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/fibonacci").
             contentType(MediaType.APPLICATION_JSON_UTF8).param("n", "10")).
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());

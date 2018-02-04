@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  * 
  * @author krishnanand (Kartik Krishnanand)
  */
-@RestController("/rest")
-public class Controller {
+@RestController
+public class Controller extends AbstractController {
   
   private final ITakeHomeService takeHomeService;
   
@@ -28,7 +28,7 @@ public class Controller {
    * 
    * @return hello world as response
    */
-  @RequestMapping(value="/helloworld", method=RequestMethod.GET)
+  @RequestMapping(value="/rest/helloworld", method=RequestMethod.GET)
   @ResponseBody
   public String helloWorld() {
    return "Hello World";
@@ -40,7 +40,7 @@ public class Controller {
    * @param content value object encapsulating the number of words
    * @return response body representing the words and their frequencies
    */
-  @RequestMapping(value="/frequentwords", method=RequestMethod.GET)
+  @RequestMapping(value="/rest/frequentwords", method=RequestMethod.GET)
   @ResponseBody
   public ParagraphCount mostFrequentWords(
       @RequestBody(required=false) final ParagraphContent content) {
@@ -53,13 +53,13 @@ public class Controller {
    * @param n length of the fibonacci sequence
    * @return array of fibonacci numbers
    */
-  @RequestMapping(value="/fibonacci", method=RequestMethod.GET)
+  @RequestMapping(value="/rest/fibonacci", method=RequestMethod.GET)
   @ResponseBody
   long[] fibonacciSequence(@RequestParam final int n) {
     return this.takeHomeService.generateFibonacciSeries(n);
   }
   
-  @RequestMapping(value="/deadlock", method=RequestMethod.GET)
+  @RequestMapping(value="/rest/deadlock", method=RequestMethod.GET)
   @ResponseBody
   boolean isDeadlock(@RequestParam final int timeInSeconds) {
     return Deadlocks.startAndDetectDeadlocks(timeInSeconds);

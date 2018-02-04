@@ -18,6 +18,16 @@ public class PersonService implements IPersonService {
   public PersonService(IPersonDao personDao) {
     this.personDao = personDao;
   }
+  
+  /**
+   * Verifies if the string is empty.
+   * 
+   * @param str string to be verified
+   * @return {@code true} if empty; {@code false} otherwise
+   */
+  private boolean isEmpty(String str) {
+    return str == null || str.isEmpty();
+  }
 
   /**
    * Creates an entry in the database and returns a unique identifier.
@@ -25,8 +35,16 @@ public class PersonService implements IPersonService {
   @Override
   @Transactional
   public PersonCredentials createPerson(Person person) {
-    String personId = this.personDao.createPerson(person);
     PersonCredentials pc = new PersonCredentials();
+    if (person == null) {
+      pc.addError(400, "No record was found.");
+      return pc;
+    }
+    if (isEmpty(person.getFirstName()) || isEmpty(person.getLastName())) {
+      pc.addError(400, "The record was invalid.");
+      return pc;
+    }
+    String personId = this.personDao.createPerson(person);
     pc.setPersonId(personId);
     return pc;
   }
