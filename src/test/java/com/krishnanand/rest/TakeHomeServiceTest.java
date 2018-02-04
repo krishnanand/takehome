@@ -1,6 +1,7 @@
 package com.krishnanand.rest;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -34,9 +35,43 @@ public class TakeHomeServiceTest {
   
   @Test
   public void testCountOccurrencesOfText() throws Exception {
-   List<Map<String, Integer>> list =
+   ParagraphCount pc  =
         this.takeHomeService.countOccurrencesOfText(readParagraphFromFile());
-   Assert.assertEquals(list.get(0).get("But"), Integer.valueOf(1));
+   Assert.assertNotNull(pc.getWordCount());
+   Assert.assertEquals(pc.getWordCount().get(0).get("But"), Integer.valueOf(1));
+  }
+  
+  @Test
+  public void testCountOccurrencesOfText_MissingContent() throws Exception {
+   ParagraphCount pc =
+        this.takeHomeService.countOccurrencesOfText(new ParagraphContent());
+   Assert.assertNull(pc.getWordCount());
+   List<IError.Error> errors = pc.getErrors();
+   Assert.assertEquals(
+       errors, Arrays.asList(new IError.Error(400, "No paragraph content found")));
+  }
+  
+  @Test
+  public void testCountOccurrencesOfText_Null() throws Exception {
+    ParagraphCount pc =
+        this.takeHomeService.countOccurrencesOfText(null);
+    Assert.assertNull(pc.getWordCount());
+    List<IError.Error> errors = pc.getErrors();
+    Assert.assertEquals(
+        errors, Arrays.asList(new IError.Error(400, "No paragraph content found")));
+  }
+  
+  
+  @Test
+  public void testCountOccurrencesOfText_EmptyText() throws Exception {
+    ParagraphContent pc = new ParagraphContent();
+    pc.setParagraph("");
+    ParagraphCount count =
+        this.takeHomeService.countOccurrencesOfText(pc);
+    Assert.assertNull(count.getWordCount());
+    List<IError.Error> errors = count.getErrors();
+    Assert.assertEquals(
+        errors, Arrays.asList(new IError.Error(400, "No paragraph content found")));
   }
   
   private ParagraphContent readParagraphFromFile() throws Exception {

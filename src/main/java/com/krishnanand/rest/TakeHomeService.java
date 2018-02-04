@@ -1,7 +1,7 @@
 package com.krishnanand.rest;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +31,21 @@ public class TakeHomeService implements ITakeHomeService {
    * </ul>
    */
   @Override
-  public List<Map<String, Integer>>countOccurrencesOfText(
+  public ParagraphCount countOccurrencesOfText(
       ParagraphContent content) {
-    String text = content.getParagraph();
+    String text =
+        content == null || content.getParagraph() == null ? null : content.getParagraph();
     if (text == null || text.isEmpty()) {
-      return Collections.emptyList();
+      ParagraphCount pc = new ParagraphCount();
+      pc.addError(400, "No paragraph content found");
+      return pc;
     }
     String[] words = text.split(" ");
     Map<String, Integer> map = new LinkedHashMap<>();
     for (String word : words) {
-      word = word.replaceAll("\\.", "").replaceAll(",", "").replaceAll("\\?", "");
+      word =
+          word.replaceAll("\\.", "").replaceAll(",", "").replaceAll("\\?", "")
+              .replaceAll(";", "").replaceAll("!", "");
       map.put(word, map.getOrDefault(word, 0) + 1);
     }
 
@@ -56,7 +61,9 @@ public class TakeHomeService implements ITakeHomeService {
       entryMap.put(pr.getText(), pr.getNumberOfOccurrences());
       list.add(entryMap);
     }
-    return list;
+    ParagraphCount pc = new ParagraphCount();
+    pc.setWordCount(list);
+    return pc;
   }
 
   /**

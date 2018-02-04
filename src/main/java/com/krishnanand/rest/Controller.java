@@ -45,8 +45,8 @@ public class Controller {
    */
   @RequestMapping(value="/frequentwords", method=RequestMethod.GET)
   @ResponseBody
-  public List<Map<String, Integer>> mostFrequentWords(
-      @RequestBody final ParagraphContent content) {
+  public ParagraphCount mostFrequentWords(
+      @RequestBody(required=false) final ParagraphContent content) {
     return this.takeHomeService.countOccurrencesOfText(content);
   }
   
@@ -67,4 +67,7 @@ public class Controller {
   boolean isDeadlock(@RequestParam final int timeInSeconds) {
     return Deadlocks.startAndDetectDeadlocks(timeInSeconds);
   }
+  
+  //@RequestMapping(value="/addPerson", method=RequestMethod.POST)
+  
 }

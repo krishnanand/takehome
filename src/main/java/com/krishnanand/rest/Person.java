@@ -1,15 +1,29 @@
 package com.krishnanand.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * A value object that creates a person.
  * 
  * @author krishnanand (Kartik Krishnanand)
  */
-public class Person {
+@JsonInclude(Include.NON_NULL)
+public class Person implements IError {
   
   private String firstName;
   
   private String lastName;
+  
+  @JsonInclude(value=Include.NON_EMPTY)
+  private List<Error> errors;
+  
+  public Person() {
+    this.errors = new ArrayList<>();
+  }
 
   public String getFirstName() {
     return firstName;
@@ -61,5 +75,21 @@ public class Person {
     builder.append(lastName);
     builder.append("]");
     return builder.toString();
+  }
+
+  /**
+   * Returns a list of errors that were generated.
+   */
+  @Override
+  public List<Error> getErrors() {
+    return this.errors;
+  }
+
+  /**
+   * Creates and adds an error representation.
+   */
+  @Override
+  public void addError(int code, String message) {
+    this.errors.add(new Error(code, message));
   }
 }

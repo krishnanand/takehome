@@ -1,6 +1,7 @@
 package com.krishnanand.rest;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -62,9 +63,25 @@ public class ControllerTest {
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
     ObjectMapper mapper = new ObjectMapper();
-    List<Map<String, Integer>> list =
-        mapper.readValue(response, new TypeReference<List<Map<String, Integer>>>() {});
-    Assert.assertEquals(list.get(0).get("But"), Integer.valueOf(1));
+    ParagraphCount pc = mapper.readValue(response, ParagraphCount.class);
+    List<Map<String, Integer>> wordCount = pc.getWordCount();
+    Assert.assertEquals(wordCount.get(0).get("But"), Integer.valueOf(1));
+  }
+  
+  @Test
+  public void testMostFrequentWords_MissingParagraph() throws Exception {
+    MvcResult result = 
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/frequentwords").
+            contentType(MediaType.APPLICATION_JSON_UTF8)).
+            andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    ParagraphCount pc =
+        mapper.readValue(response, ParagraphCount.class);
+    Assert.assertTrue(pc.getWordCount() == null || pc.getWordCount().isEmpty());
+    List<IError.Error> errors = pc.getErrors();
+    Assert.assertEquals(
+        Arrays.asList(new IError.Error(400, "No paragraph content found")), errors);
   }
   
   @Test

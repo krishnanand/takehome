@@ -1,16 +1,21 @@
 package com.krishnanand.rest;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
 /**
  * An instance of the class contains paragraph content representing a request body for all
  * JSON requests.
  * 
  * @author krishnanand (Kartik Krishnanand)
  */
+@JsonInclude(Include.NON_NULL)
 public class ParagraphContent {
-  
+
   // Represents a paragraph string to be passed as request body.
   private String paragraph;
 
+  @JsonInclude(Include.ALWAYS)
   public String getParagraph() {
     return paragraph;
   }

@@ -1,16 +1,20 @@
 package com.krishnanand.rest;
 
+import java.util.List;
+
 /**
  * An instance of the class encapsulates the string and the number of times it occurs in a
  * a string.
  * 
  * @author krishnanand (Kartik Krishnanand)
  */
-public class ParagraphResponse implements Comparable<ParagraphResponse>{
+public class ParagraphResponse implements Comparable<ParagraphResponse>, IError {
   
   private String text;
   
   private int numberOfOccurrences;
+
+  private List<Error> errors;
   
   public ParagraphResponse(String text, int numberOfOccurrences) {
     this.text = text;
@@ -79,7 +83,6 @@ public class ParagraphResponse implements Comparable<ParagraphResponse>{
     return builder.toString();
   }
 
-
   /**
    * Orders objects by the text content, and then by number of occurrences
    */
@@ -90,5 +93,15 @@ public class ParagraphResponse implements Comparable<ParagraphResponse>{
       return this.getNumberOfOccurrences() - o.getNumberOfOccurrences();
      }
     return stringCompare;
+  }
+
+  @Override
+  public List<Error> getErrors() {
+    return this.errors;
+  }
+
+  @Override
+  public void addError(int code, String message) {
+    this.errors.add(new Error(code, message));
   }
 }
