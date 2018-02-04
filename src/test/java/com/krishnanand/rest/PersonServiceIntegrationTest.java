@@ -88,7 +88,7 @@ public class PersonServiceIntegrationTest {
   public void testFindPersonByPersonId_PersonNotFound() throws Exception {
     Person actual = this.personService.findPersonByPersonId("");
     Person expected = new Person();
-    expected.addError(404, "No record was found.");
+    expected.addError(404, "No record was found for the input.");
     Assert.assertEquals(expected, actual);
   }
   
@@ -120,7 +120,7 @@ public class PersonServiceIntegrationTest {
     // Nothing to be deleted.
     PersonDeleteResponse actual = this.personService.deletePersonById("");
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.addError(404, "No record was found.");
+    expected.addError(404, "No record was found for the input.");
     Assert.assertEquals(expected, actual);
   }
 }

@@ -41,7 +41,9 @@ public class PersonServiceTest {
   public void testCreatePerson_NoRecord() throws Exception {
     PersonCredentials actual = ps.createPerson(null);
     PersonCredentials expected = new PersonCredentials();
-    expected.addError(400, "No record was found.");
+    expected.addError(
+        400,
+        "The record was invalid. Please check if either first name or last name is missing.");
     Assert.assertEquals(expected, actual);
   }
   
@@ -58,7 +60,7 @@ public class PersonServiceTest {
   @Test
   public void testFindPersonByPersonId_Fail() throws Exception {
     Person expected = new Person();
-    expected.addError(404, "No record was found.");
+    expected.addError(404, "No record was found for the input.");
     Mockito.when(this.personDao.findPersonById("")).thenReturn(expected);
     Person actual = ps.findPersonByPersonId("");
     Assert.assertEquals(expected, actual);
@@ -67,7 +69,7 @@ public class PersonServiceTest {
   @Test
   public void testDeletePersonByPersonId_Fail() throws Exception {
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.addError(404, "No record was found.");
+    expected.addError(404, "No record was found for the input.");
     Mockito.when(this.personDao.deletePersonByPersonId("")).thenReturn(0);
     PersonDeleteResponse actual = ps.deletePersonById("");
     Assert.assertEquals(expected, actual);
