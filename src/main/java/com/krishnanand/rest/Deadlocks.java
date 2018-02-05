@@ -2,6 +2,8 @@ package com.krishnanand.rest;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -22,11 +24,15 @@ public class Deadlocks {
    * @return {@code true} if the thread is deadlocked; {@code false} otherwise
    */
   static boolean isDeadlockAfterPeriod(int timeInSeconds) {
-   
     ThreadMXBean bean = ManagementFactory.getThreadMXBean();
     DeadlockThread thread = new DeadlockThread(bean);
     Timer timer = new Timer();
     timer.schedule(thread, timeInSeconds * 1000);
+    try {
+      TimeUnit.SECONDS.sleep(timeInSeconds);
+    } catch (InterruptedException e) {
+      // Swallow the exception.
+    }
     return thread.isDeadlock();
   }
   
@@ -35,10 +41,14 @@ public class Deadlocks {
    * 
    * @param timeInSeconds time in seconds
    * @return {@code true} if deadlock is detected; {@code false} otherwise
+   * @throws InterruptedException 
    */
-  static boolean startAndDetectDeadlocks(int timeInSeconds) {
+  static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds)  {
     startDeadlock();
-    return Deadlocks.isDeadlockAfterPeriod(timeInSeconds);
+    boolean deadlock = Deadlocks.isDeadlockAfterPeriod(timeInSeconds);
+    Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
+    deadlockMap.put("deadlock", deadlock);
+    return deadlockMap;
   }
   
   private static void startDeadlock() {

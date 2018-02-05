@@ -7,16 +7,16 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.internal.matchers.VarargMatcher;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
+
 
 
 /**
@@ -27,11 +27,11 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes= {App.class})
 public class RestServiceTest {
-  
-  @Autowired
+
+  @InjectMocks
   private RestService restService;
   
-  @InjectMocks
+  @Mock(name="restTemplate")
   private RestTemplate restTemplate;
   
   @Before
@@ -39,7 +39,28 @@ public class RestServiceTest {
     MockitoAnnotations.initMocks(this);
   }
   
-  @SuppressWarnings("unchecked")
+  class MyVarargMatcher implements ArgumentMatcher<Object[]>, VarargMatcher {
+
+    @Override
+    public boolean matches(Object[] argument) {
+      return true;
+    }
+  }
+  
+  public class ClassOrSubclassMatcher<T> implements ArgumentMatcher<Class<T>> {
+
+    private final Class<T> targetClass;
+
+    public ClassOrSubclassMatcher(Class<T> targetClass) {
+      this.targetClass = targetClass;
+    }
+
+    @Override
+    public boolean matches(Class<T> argument) {
+      return argument.getClass().isAssignableFrom(this.targetClass);
+    }
+  }
+  
   @Test
   public void testFetchResponse() throws Exception {
     List<User> expected = new ArrayList<>();
@@ -49,9 +70,10 @@ public class RestServiceTest {
     user.setUserId(1L);
     user.setId(1L);
     expected.add(user);
-    Mockito.when(this.restTemplate.execute(
-        Mockito.anyString(), Mockito.eq(HttpMethod.GET), (RequestCallback) Mockito.isNull(),
-        Mockito.any(ResponseExtractor.class))).thenReturn(expected);
+    Mockito.when(this.restTemplate.getForObject(
+        Mockito.anyString(),
+        Mockito.argThat(new ClassOrSubclassMatcher<User[]>(User[].class)))).
+            thenReturn(new User[] {user});
     List<User> actual = this.restService.fetchDataFromExternalService();
     Assert.assertEquals(expected, actual);
   }

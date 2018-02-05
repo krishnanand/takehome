@@ -63,28 +63,13 @@ public class Person implements IError {
       return false;
     }
     Person other = (Person) obj;
-    if (errors == null) {
-      if (other.errors != null) {
-        return false;
-      }
-    } else if (!errors.equals(other.errors)) {
-      return false;
-    }
-    if (firstName == null) {
-      if (other.firstName != null) {
-        return false;
-      }
-    } else if (!firstName.equals(other.firstName)) {
-      return false;
-    }
-    if (lastName == null) {
-      if (other.lastName != null) {
-        return false;
-      }
-    } else if (!lastName.equals(other.lastName)) {
-      return false;
-    }
-    return true;
+    return (
+        this.errors == other.getErrors() ||
+        this.errors != null && this.errors.equals(other.getErrors())) &&
+        (this.firstName == other.getFirstName() ||
+        this.firstName != null && this.firstName.equals(other.getFirstName())) &&
+        (this.lastName == other.getLastName() ||
+        this.lastName != null && this.lastName.equals(other.getLastName()));
   }
 
   @Override

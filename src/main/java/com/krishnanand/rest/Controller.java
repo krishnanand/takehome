@@ -1,5 +1,7 @@
 package com.krishnanand.rest;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,9 +61,15 @@ public class Controller extends AbstractController {
     return this.takeHomeService.generateFibonacciSeries(n);
   }
   
+  /**
+   * Initiates a deadlock, and verifies after a configured time has elapsed.
+   * 
+   * @param timeInSeconds time in seconds
+   * @return 
+   */
   @RequestMapping(value="/rest/deadlock", method=RequestMethod.GET)
   @ResponseBody
-  boolean isDeadlock(@RequestParam final int timeInSeconds) {
+  Map<String, Boolean> isDeadlock(@RequestParam final int timeInSeconds) {
     return Deadlocks.startAndDetectDeadlocks(timeInSeconds);
   }
 }

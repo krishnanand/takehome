@@ -47,25 +47,15 @@ public class PersonCredentials implements IError {
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!PersonCredentials.class.isAssignableFrom(obj.getClass())) {
       return false;
     }
     PersonCredentials other = (PersonCredentials) obj;
-    if (errors == null) {
-      if (other.errors != null) {
-        return false;
-      }
-    } else if (!errors.equals(other.errors)) {
-      return false;
-    }
-    if (personId == null) {
-      if (other.personId != null) {
-        return false;
-      }
-    } else if (!personId.equals(other.personId)) {
-      return false;
-    }
-    return true;
+    return (
+        this.errors == other.getErrors() ||
+        (this.errors != null && this.errors.equals(other.getErrors()))) && 
+        (this.personId == other.getPersonId() ||
+        (this.personId != null && this.personId.equals(other.getPersonId())));
   }
 
   @Override

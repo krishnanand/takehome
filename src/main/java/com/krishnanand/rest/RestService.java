@@ -1,18 +1,11 @@
 package com.krishnanand.rest;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * An instance of this class encapsulates all functions that invoke third party services.
@@ -36,17 +29,7 @@ public class RestService implements IRestService {
    */
   @Override
   public List<User> fetchDataFromExternalService() {
-    return
-        this.restTemplate.execute(URL, HttpMethod.GET, null, new ResponseExtractor<List<User>>() {
-
-          @Override
-          public List<User> extractData(ClientHttpResponse response) throws IOException {
-            InputStream is = response.getBody();
-            ObjectMapper objectMapper = new ObjectMapper();
-            List<User> users = objectMapper.readValue(is, new TypeReference<List<User>>() {});
-            return users;
-          }
-        });
+    return Arrays.asList(this.restTemplate.getForObject(URL, User[].class));
   }
 
 }

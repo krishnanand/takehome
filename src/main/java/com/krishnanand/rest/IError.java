@@ -70,17 +70,9 @@ public interface IError {
         return false;
       }
       Error other = (Error) obj;
-      if (code != other.code) {
-        return false;
-      }
-      if (message == null) {
-        if (other.message != null) {
-          return false;
-        }
-      } else if (!message.equals(other.message)) {
-        return false;
-      }
-      return true;
+      return this.code == other.getCode() &&
+          (this.message == other.getMessage() ||
+          (this.message != null && this.message.equals(other.getMessage())));
     }
   }
 

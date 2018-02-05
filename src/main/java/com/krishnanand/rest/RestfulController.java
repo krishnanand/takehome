@@ -1,7 +1,8 @@
 package com.krishnanand.rest;
 
-import java.util.Set;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RestfulController extends AbstractController {
   
+  private final IRestService restService;
+  
+  @Autowired
+  public RestfulController(IRestService restService) {
+    this.restService = restService;
+  }
+  
   @GetMapping("/service/get")
   @ResponseBody
-  public Set<User> fetchDataFromExternalService() throws Exception {
-    return null;
+  public List<User> fetchDataFromExternalService() throws Exception {
+    return this.restService.fetchDataFromExternalService();
   }
 }

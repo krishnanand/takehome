@@ -60,25 +60,14 @@ public class PersonDeleteResponse implements IError {
     if (obj == null) {
       return false;
     }
-    if (getClass() != obj.getClass()) {
+    if (!PersonDeleteResponse.class.isAssignableFrom(obj.getClass())) {
       return false;
     }
     PersonDeleteResponse other = (PersonDeleteResponse) obj;
-    if (success == null) {
-      if (other.success != null) {
-        return false;
-      }
-    } else if (!success.equals(other.success)) {
-      return false;
-    }
-    if (errors == null) {
-      if (other.errors != null) {
-        return false;
-      }
-    } else if (!errors.equals(other.errors)) {
-      return false;
-    }
-    return true;
+    return (this.success == other.success ||
+        (this.success != null && this.success.equals(other.getSuccess()))) &&
+        (this.errors == other.getErrors() ||
+        (this.errors != null && this.errors.equals(other.getErrors())));
   }
 
   @Override
