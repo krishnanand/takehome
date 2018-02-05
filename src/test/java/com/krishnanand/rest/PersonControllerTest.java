@@ -231,5 +231,18 @@ public class PersonControllerTest {
     PersonDeleteResponse expected = new PersonDeleteResponse();
     expected.setSuccess(true);
     Assert.assertEquals(expected, actual);
+    
+    // Checking if the record is truly deleted.
+    MvcResult verifyResult =
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/person/delete").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "ABCDE12345")).
+            andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+    String verifyResponse = new String(verifyResult.getResponse().getContentAsByteArray());
+    ObjectMapper verifyMapper = new ObjectMapper();
+    PersonDeleteResponse verifyActual =
+        verifyMapper.readValue(verifyResponse, PersonDeleteResponse.class);
+    PersonDeleteResponse verifyExpected = new PersonDeleteResponse();
+    verifyExpected.addError(404, "No record was found for the input.");
+    Assert.assertEquals(verifyExpected, verifyActual);
   }
 }

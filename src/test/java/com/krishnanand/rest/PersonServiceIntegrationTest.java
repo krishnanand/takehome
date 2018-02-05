@@ -85,10 +85,25 @@ public class PersonServiceIntegrationTest {
   }
   
   @Test
-  public void testFindPersonByPersonId_PersonNotFound() throws Exception {
+  public void testFindPersonByPersonId_EmptyInput() throws Exception {
     Person actual = this.personService.findPersonByPersonId("");
     Person expected = new Person();
     expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testFindPersonByPersonId_NullInput() throws Exception {
+    Person actual = this.personService.findPersonByPersonId(null);
+    Person expected = new Person();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  public void testFindPersonByPersonId_MissingInput() throws Exception {
+    Person actual = this.personService.findPersonByPersonId("wrong");
+    Person expected = new Person();
+    expected.addError(404, "The input was invalid. Please recheck input.");
     Assert.assertEquals(expected, actual);
   }
   
@@ -113,14 +128,35 @@ public class PersonServiceIntegrationTest {
   }
   
   @Test
-  public void testDeleteByPersonId_MissingId() throws Exception {
+  public void testDeleteByPersonId_EmptyString() throws Exception {
     // Checking no record exists.
     Assert.assertNull(this.fetchPersonById(""));
-    
     // Nothing to be deleted.
     PersonDeleteResponse actual = this.personService.deletePersonById("");
     PersonDeleteResponse expected = new PersonDeleteResponse();
     expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeleteByPersonId_NullString() throws Exception {
+    // Checking no record exists.
+    Assert.assertNull(this.fetchPersonById(""));
+    // Nothing to be deleted.
+    PersonDeleteResponse actual = this.personService.deletePersonById(null);
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeleteByPersonId_NoRecordsFound() throws Exception {
+    // Checking no record exists.
+    Assert.assertNull(this.fetchPersonById(""));
+    // Nothing to be deleted.
+    PersonDeleteResponse actual = this.personService.deletePersonById("wrong");
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.addError(404, "No record was found for the input.");
     Assert.assertEquals(expected, actual);
   }
 }
