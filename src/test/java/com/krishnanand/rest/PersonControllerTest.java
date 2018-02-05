@@ -79,6 +79,48 @@ public class PersonControllerTest {
   }
   
   @Test
+  public void testInsertPerson_MissingLastName() throws Exception {
+    Person person = new Person();
+    person.setFirstName("Tom");
+    String json = new ObjectMapper().writeValueAsString(person);
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/person/add").
+                contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    PersonCredentials pc = mapper.readValue(response, PersonCredentials.class);
+    Assert.assertNull(pc.getPersonId());
+    List<IError.Error> expected = new ArrayList<>();
+    expected.add(
+        new IError.Error(
+            400,
+            "The input was invalid. Please check if either first name or last name is missing."));
+    Assert.assertEquals(expected, pc.getErrors());
+  }
+  
+  @Test
+  public void testInsertPerson_MissingFirstName() throws Exception {
+    Person person = new Person();
+    person.setLastName("Brady");
+    String json = new ObjectMapper().writeValueAsString(person);
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.post("/person/add").
+                contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    PersonCredentials pc = mapper.readValue(response, PersonCredentials.class);
+    Assert.assertNull(pc.getPersonId());
+    List<IError.Error> expected = new ArrayList<>();
+    expected.add(
+        new IError.Error(
+            400,
+            "The input was invalid. Please check if either first name or last name is missing."));
+    Assert.assertEquals(expected, pc.getErrors());
+  }
+  
+  @Test
   public void testFetchPersonByPersonId() throws Exception {
     MvcResult result =
         this.mockMvc.perform(MockMvcRequestBuilders.get("/person/get").
@@ -90,6 +132,20 @@ public class PersonControllerTest {
     Person expected = new Person();
     expected.setFirstName("Jane");
     expected.setLastName("Doe");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testFetchPersonByPersonId_NoDataFound() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/person/get").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "wrong")).
+            andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    Person actual = mapper.readValue(response, Person.class);
+    Person expected = new Person();
+    expected.addError(404, "No record was found for the input.");
     Assert.assertEquals(expected, actual);
   }
 }

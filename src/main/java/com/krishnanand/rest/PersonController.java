@@ -62,7 +62,12 @@ public class PersonController extends AbstractController {
 
   private <T extends IError> ResponseEntity<T> generateEntity(T object) {
     if (object.getErrors() != null && !object.getErrors().isEmpty()) {
-      return new ResponseEntity<T>(object, HttpStatus.BAD_REQUEST);
+      IError.Error error = object.getErrors().get(0);
+      if (error.getCode() == 400) {
+        return new ResponseEntity<T>(object, HttpStatus.BAD_REQUEST);
+      } else if (error.getCode() == 404) {
+        return new ResponseEntity<T>(object, HttpStatus.NOT_FOUND);
+      }
     }
     return new ResponseEntity<T>(object, HttpStatus.OK);
   }
