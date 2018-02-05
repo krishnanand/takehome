@@ -9,15 +9,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.web.client.RestTemplate;
 
 /**
- * Database credentials.
+ * Configuration object that encapsulates database credentials.
  * 
  * @author krishnanand (Kartik Krishnanand)
  */
 @Configuration
 @PropertySource(value="classpath:application.properties", ignoreResourceNotFound=true)
-public class DatabaseCredentials {
+public class ConfigurationProperties {
   
   @Value("${spring.datasource.driver-class-name}")
   private String driverClass;
@@ -47,6 +48,9 @@ public class DatabaseCredentials {
     return password;
   }
 
+  /**
+   * Instantiates a datasource.
+   */
   @Bean()
   public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -57,11 +61,25 @@ public class DatabaseCredentials {
     return dataSource;
   }
   
+  /**
+   * Initialises a restful template.
+   */
+  @Bean
+  RestTemplate restTemplate() {
+    return new RestTemplate();
+  }
+  
+  /**
+   * Enables the in memory local database to have a relative path.
+   */
   @PostConstruct
   void setH2DbProperties() {
     System.setProperty("h2.implicitRelativePath", "true");
   }
   
+  /**
+   * Resets the in memory local database configuration.
+   */
   @PreDestroy
   void removeH2DbProperties() {
     System.clearProperty("h2.implicitRelativePath");

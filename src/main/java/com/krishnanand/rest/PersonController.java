@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * An instance of this class represents an entry point to all service requests to perform
+ * {@code add}, {@code delete}, and {@code query} operations.
+ * 
  * @author krishnanand (Kartik Krishnanand)
  */
 @RestController
@@ -61,17 +64,5 @@ public class PersonController extends AbstractController {
       @RequestParam(required=false) final String personId) {
     PersonDeleteResponse response = this.personService.deletePersonById(personId);
     return this.generateEntity(response);
-  }
-
-  private <T extends IError> ResponseEntity<T> generateEntity(T object) {
-    if (object.getErrors() != null && !object.getErrors().isEmpty()) {
-      IError.Error error = object.getErrors().get(0);
-      if (error.getCode() == 400) {
-        return new ResponseEntity<T>(object, HttpStatus.BAD_REQUEST);
-      } else if (error.getCode() == 404) {
-        return new ResponseEntity<T>(object, HttpStatus.NOT_FOUND);
-      }
-    }
-    return new ResponseEntity<T>(object, HttpStatus.OK);
   }
 }
