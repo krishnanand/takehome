@@ -28,7 +28,7 @@ public class PersonServiceTest {
   }
   
   @Test
-  public void testCreatePerson() throws Exception {
+  public void testCreatePerson_Success() throws Exception {
     Person person = new Person();
     person.setFirstName("First");
     person.setLastName("Last");
@@ -62,7 +62,7 @@ public class PersonServiceTest {
   }
   
   @Test
-  public void testCreatePerson_NoRecord() throws Exception {
+  public void testCreatePerson_NullRecord() throws Exception {
     PersonCredentials actual = ps.createPerson(null);
     PersonCredentials expected = new PersonCredentials();
     expected.addError(
