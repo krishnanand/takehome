@@ -111,8 +111,15 @@ public class PersonServiceTest {
   public void testDeletePersonByPersonId_EmptyQueryParameter() throws Exception {
     PersonDeleteResponse expected = new PersonDeleteResponse();
     expected.addError(400, "The input was invalid. Please recheck input.");
-    Mockito.when(this.personDao.deletePersonByPersonId("")).thenReturn(0);
     PersonDeleteResponse actual = ps.deletePersonById("");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeletePersonByPersonId_NullParameter() throws Exception {
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    PersonDeleteResponse actual = ps.deletePersonById(null);
     Assert.assertEquals(expected, actual);
   }
   
