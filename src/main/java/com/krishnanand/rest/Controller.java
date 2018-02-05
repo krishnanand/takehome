@@ -64,7 +64,4 @@ public class Controller extends AbstractController {
   boolean isDeadlock(@RequestParam final int timeInSeconds) {
     return Deadlocks.startAndDetectDeadlocks(timeInSeconds);
   }
-  
-  //@RequestMapping(value="/addPerson", method=RequestMethod.POST)
-  
 }

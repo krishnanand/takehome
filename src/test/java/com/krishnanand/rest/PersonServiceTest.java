@@ -43,7 +43,7 @@ public class PersonServiceTest {
     PersonCredentials expected = new PersonCredentials();
     expected.addError(
         400,
-        "The record was invalid. Please check if either first name or last name is missing.");
+        "The input was invalid. Please check if either first name or last name is missing.");
     Assert.assertEquals(expected, actual);
   }
   

@@ -12,11 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PersonService implements IPersonService {
   
-  private static final String INVALID_RECORD =
-      "The record was invalid. Please check if either first name or last name is missing.";
+  private static final String INVALID_INPUT =
+      "The input was invalid. Please check if either first name or last name is missing.";
   
-  private static final String NO_RECORD_FOUND =
-      "No record was found for the input.";
+  private static final String NO_RECORD_FOUND = "No record was found for the input.";
   
   private final IPersonDao personDao;
   
@@ -43,11 +42,11 @@ public class PersonService implements IPersonService {
   public PersonCredentials createPerson(Person person) {
     PersonCredentials pc = new PersonCredentials();
     if (person == null) {
-      pc.addError(400, INVALID_RECORD);
+      pc.addError(400, INVALID_INPUT);
       return pc;
     }
     if (isEmpty(person.getFirstName()) || isEmpty(person.getLastName())) {
-      pc.addError(400, INVALID_RECORD);
+      pc.addError(400, INVALID_INPUT);
       return pc;
     }
     String personId = this.personDao.createPerson(person);
@@ -61,6 +60,12 @@ public class PersonService implements IPersonService {
   @Override
   @Transactional
   public Person findPersonByPersonId(String personId) {
+    if (personId == null || personId.isEmpty()) {
+      Person person = new Person();
+      person.addError(404, NO_RECORD_FOUND);
+      return person;
+    }
+    
     Person person =  this.personDao.findPersonById(personId);
     if (person == null) {
       person = new Person();

@@ -42,7 +42,7 @@ public class PersonController extends AbstractController {
    * @return response entity encapsulating person's unique identifier or errors
    */
   @GetMapping(value = "/person/get")
-  ResponseEntity<Person> getPersonByPersonId(@RequestParam final String personId) {
+  ResponseEntity<Person> getPersonByPersonId(@RequestParam(required=false) final String personId) {
     Person person = this.personService.findPersonByPersonId(personId);
     return this.generateEntity(person);
   }
@@ -54,7 +54,8 @@ public class PersonController extends AbstractController {
    * @return response entity encapsulating person's unique identifier or errors
    */
   @DeleteMapping(value = "/person/delete")
-  ResponseEntity<PersonDeleteResponse> deletePersonById(@RequestParam final String personId) {
+  ResponseEntity<PersonDeleteResponse> deletePersonById(
+      @RequestParam(required=false) final String personId) {
     PersonDeleteResponse response = this.personService.deletePersonById(personId);
     return this.generateEntity(response);
   }
