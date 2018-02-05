@@ -44,7 +44,7 @@ public class PersonControllerTest {
   }
   
   @Test
-  public void testInsertPerson() throws Exception {
+  public void testInsertPerson_Success() throws Exception {
     Person person = new Person();
     person.setFirstName("Tom");
     person.setLastName("Brady");
@@ -52,7 +52,7 @@ public class PersonControllerTest {
     MvcResult result =
         this.mockMvc.perform(MockMvcRequestBuilders.post("/person/add").
                 contentType(MediaType.APPLICATION_JSON_UTF8).content(json)).
-            andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+            andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
     ObjectMapper mapper = new ObjectMapper();
     PersonCredentials pc = mapper.readValue(response, PersonCredentials.class);
@@ -61,7 +61,7 @@ public class PersonControllerTest {
   }
   
   @Test
-  public void testInsertPerson_NullValue() throws Exception {
+  public void testInsertPerson_NullData() throws Exception {
     MvcResult result =
         this.mockMvc.perform(MockMvcRequestBuilders.post("/person/add").
                 contentType(MediaType.APPLICATION_JSON_UTF8)).

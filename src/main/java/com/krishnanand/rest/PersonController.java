@@ -32,6 +32,9 @@ public class PersonController extends AbstractController {
   @PostMapping(value = "/person/add")
   ResponseEntity<PersonCredentials> addPerson(@RequestBody(required = false) Person person) {
     PersonCredentials personCredentials = this.personService.createPerson(person);
+    if (personCredentials.getErrors() == null || personCredentials.getErrors().isEmpty()) {
+      return new ResponseEntity<PersonCredentials>(personCredentials, HttpStatus.CREATED);
+    }
     return this.generateEntity(personCredentials);
   }
 
