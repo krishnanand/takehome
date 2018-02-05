@@ -16,7 +16,7 @@ public class PersonDeleteResponse implements IError {
   
   // If {@code true}, then it indicates that the resource was successfully deleted.
   // If {@code false} or {@code null}, then it indicates that the resource was found.
-  private Boolean deleteSuccess;
+  private Boolean success;
   
   @JsonInclude(value=Include.NON_EMPTY)
   private List<IError.Error> errors = new ArrayList<>();
@@ -30,12 +30,12 @@ public class PersonDeleteResponse implements IError {
     return this.errors;
   }
 
-  public Boolean getDeleteSuccess() {
-    return deleteSuccess;
+  public Boolean getSuccess() {
+    return success;
   }
 
-  public void setDeleteSuccess(Boolean deleteSuccess) {
-    this.deleteSuccess = deleteSuccess;
+  public void setSuccess(Boolean deleteSuccess) {
+    this.success = deleteSuccess;
   }
 
   public void setErrors(List<IError.Error> errors) {
@@ -47,7 +47,7 @@ public class PersonDeleteResponse implements IError {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((deleteSuccess == null) ? 0 : deleteSuccess.hashCode());
+    result = prime * result + ((success == null) ? 0 : success.hashCode());
     result = prime * result + ((errors == null) ? 0 : errors.hashCode());
     return result;
   }
@@ -64,11 +64,11 @@ public class PersonDeleteResponse implements IError {
       return false;
     }
     PersonDeleteResponse other = (PersonDeleteResponse) obj;
-    if (deleteSuccess == null) {
-      if (other.deleteSuccess != null) {
+    if (success == null) {
+      if (other.success != null) {
         return false;
       }
-    } else if (!deleteSuccess.equals(other.deleteSuccess)) {
+    } else if (!success.equals(other.success)) {
       return false;
     }
     if (errors == null) {
@@ -90,7 +90,7 @@ public class PersonDeleteResponse implements IError {
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("PersonDeleteResponse [deleteSuccess=");
-    builder.append(deleteSuccess);
+    builder.append(success);
     builder.append(", errors=");
     builder.append(errors);
     builder.append("]");

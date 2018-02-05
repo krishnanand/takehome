@@ -15,6 +15,8 @@ public class PersonService implements IPersonService {
   private static final String INVALID_INPUT =
       "The input was invalid. Please check if either first name or last name is missing.";
   
+  private static final String INVALID_PERSON_ID = "The input was invalid. Please recheck input.";
+  
   private static final String NO_RECORD_FOUND = "No record was found for the input.";
   
   private final IPersonDao personDao;
@@ -62,7 +64,7 @@ public class PersonService implements IPersonService {
   public Person findPersonByPersonId(String personId) {
     if (personId == null || personId.isEmpty()) {
       Person person = new Person();
-      person.addError(404, NO_RECORD_FOUND);
+      person.addError(400, INVALID_PERSON_ID);
       return person;
     }
     
@@ -77,12 +79,17 @@ public class PersonService implements IPersonService {
   @Override
   @Transactional
   public PersonDeleteResponse deletePersonById(String personId) {
+    if (personId == null || personId.isEmpty()) {
+      PersonDeleteResponse response = new PersonDeleteResponse();
+      response.addError(400, INVALID_PERSON_ID);
+      return response;
+    }
     int count = this.personDao.deletePersonByPersonId(personId);
     PersonDeleteResponse response = new PersonDeleteResponse();
     if (count == 0) {
       response.addError(404, NO_RECORD_FOUND);
     } else {
-      response.setDeleteSuccess(true);
+      response.setSuccess(true);
     }
     return response;
   }

@@ -121,7 +121,7 @@ public class PersonControllerTest {
   }
   
   @Test
-  public void testFetchPersonByPersonId() throws Exception {
+  public void testFetchPersonByPersonId_Success() throws Exception {
     MvcResult result =
         this.mockMvc.perform(MockMvcRequestBuilders.get("/person/get").
                 contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "ABCDE12345")).
@@ -146,6 +146,90 @@ public class PersonControllerTest {
     Person actual = mapper.readValue(response, Person.class);
     Person expected = new Person();
     expected.addError(404, "No record was found for the input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testFetchPersonByPersonId_EmptyStringQueryParameter() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/person/get").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "")).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    Person actual = mapper.readValue(response, Person.class);
+    Person expected = new Person();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testFetchPersonByPersonId_MissingQueryParameters() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/person/get").
+                contentType(MediaType.APPLICATION_JSON_UTF8)).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    Person actual = mapper.readValue(response, Person.class);
+    Person expected = new Person();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeletePersonById_MissingQueryParameters() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/person/delete").
+                contentType(MediaType.APPLICATION_JSON_UTF8)).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    Person actual = mapper.readValue(response, Person.class);
+    Person expected = new Person();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeletePersonById_InvalidQueryParameters() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/person/delete").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "")).
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    PersonDeleteResponse actual = mapper.readValue(response, PersonDeleteResponse.class);
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.addError(400, "The input was invalid. Please recheck input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeletePersonById_NoDataFound() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/person/delete").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "wrong")).
+            andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    PersonDeleteResponse actual = mapper.readValue(response, PersonDeleteResponse.class);
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.addError(404, "No record was found for the input.");
+    Assert.assertEquals(expected, actual);
+  }
+  
+  @Test
+  public void testDeletePersonById_Success() throws Exception {
+    MvcResult result =
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/person/delete").
+                contentType(MediaType.APPLICATION_JSON_UTF8).param("personId", "ABCDE12345")).
+            andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+    String response = new String(result.getResponse().getContentAsByteArray());
+    ObjectMapper mapper = new ObjectMapper();
+    PersonDeleteResponse actual = mapper.readValue(response, PersonDeleteResponse.class);
+    PersonDeleteResponse expected = new PersonDeleteResponse();
+    expected.setSuccess(true);
     Assert.assertEquals(expected, actual);
   }
 }

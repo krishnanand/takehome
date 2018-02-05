@@ -88,7 +88,7 @@ public class PersonServiceIntegrationTest {
   public void testFindPersonByPersonId_PersonNotFound() throws Exception {
     Person actual = this.personService.findPersonByPersonId("");
     Person expected = new Person();
-    expected.addError(404, "No record was found for the input.");
+    expected.addError(400, "The input was invalid. Please recheck input.");
     Assert.assertEquals(expected, actual);
   }
   
@@ -105,7 +105,7 @@ public class PersonServiceIntegrationTest {
     // Deleting from db.
     PersonDeleteResponse actual = this.personService.deletePersonById("ABCDE12345");
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.setDeleteSuccess(true);
+    expected.setSuccess(true);
     Assert.assertEquals(expected, actual);
     
     // Checking that the record is deleted.
@@ -120,7 +120,7 @@ public class PersonServiceIntegrationTest {
     // Nothing to be deleted.
     PersonDeleteResponse actual = this.personService.deletePersonById("");
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.addError(404, "No record was found for the input.");
+    expected.addError(400, "The input was invalid. Please recheck input.");
     Assert.assertEquals(expected, actual);
   }
 }

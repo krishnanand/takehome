@@ -60,7 +60,7 @@ public class PersonServiceTest {
   @Test
   public void testFindPersonByPersonId_Fail() throws Exception {
     Person expected = new Person();
-    expected.addError(404, "No record was found for the input.");
+    expected.addError(400, "The input was invalid. Please recheck input.");
     Mockito.when(this.personDao.findPersonById("")).thenReturn(expected);
     Person actual = ps.findPersonByPersonId("");
     Assert.assertEquals(expected, actual);
@@ -69,7 +69,7 @@ public class PersonServiceTest {
   @Test
   public void testDeletePersonByPersonId_Fail() throws Exception {
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.addError(404, "No record was found for the input.");
+    expected.addError(400, "The input was invalid. Please recheck input.");
     Mockito.when(this.personDao.deletePersonByPersonId("")).thenReturn(0);
     PersonDeleteResponse actual = ps.deletePersonById("");
     Assert.assertEquals(expected, actual);
@@ -78,7 +78,7 @@ public class PersonServiceTest {
   @Test
   public void testDeletePersonByPersonId_Success() throws Exception {
     PersonDeleteResponse expected = new PersonDeleteResponse();
-    expected.setDeleteSuccess(true);
+    expected.setSuccess(true);
     Mockito.when(this.personDao.deletePersonByPersonId("ABCDE12345")).thenReturn(1);
     PersonDeleteResponse actual = ps.deletePersonById("ABCDE12345");
     Assert.assertEquals(expected, actual);
