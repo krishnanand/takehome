@@ -3,6 +3,8 @@ package com.krishnanand.rest;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,10 +45,13 @@ public class Controller extends AbstractController {
    * @return response body representing the words and their frequencies
    */
   @RequestMapping(value="/rest/frequentwords", method=RequestMethod.GET)
-  @ResponseBody
-  public ParagraphCount mostFrequentWords(
+  public ResponseEntity<Object> mostFrequentWords(
       @RequestBody(required=false) final ParagraphContent content) {
-    return this.takeHomeService.countOccurrencesOfText(content);
+    ParagraphCount pc = this.takeHomeService.countOccurrencesOfText(content);
+    if (pc.getErrors() == null || pc.getErrors().isEmpty()) {
+      return new ResponseEntity<Object>(pc.getWordCount(), HttpStatus.OK);
+    }
+    return new ResponseEntity<Object>(pc, HttpStatus.BAD_REQUEST);
   }
   
   /**

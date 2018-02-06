@@ -1,7 +1,5 @@
 package com.krishnanand.rest;
 
-import java.util.List;
-
 /**
  * An instance of the class encapsulates the string and the number of times it occurs in a
  * a string.

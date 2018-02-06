@@ -4,8 +4,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,54 +23,48 @@ public class Deadlocks {
    */
   static boolean isDeadlockAfterPeriod(int timeInSeconds) {
     ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-    DeadlockThread thread = new DeadlockThread(bean);
-    Timer timer = new Timer();
-    timer.schedule(thread, timeInSeconds * 1000);
     try {
       TimeUnit.SECONDS.sleep(timeInSeconds);
     } catch (InterruptedException e) {
       // Swallow the exception.
     }
-    return thread.isDeadlock();
+    DeadlockThread dt = new DeadlockThread(bean);
+    return dt.numberOfDeadlockedThreads() > 0;
   }
   
   /**
-   * Starts and detects deadlocks after {@code timeInSeconds} have elapsed.
+   * Initiates a deadlock and checks if it still exists after {@code timeInSeconds} have elapsed.
    * 
    * @param timeInSeconds time in seconds
    * @return {@code true} if deadlock is detected; {@code false} otherwise
-   * @throws InterruptedException 
    */
   static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds)  {
-    startDeadlock();
-    boolean deadlock = Deadlocks.isDeadlockAfterPeriod(timeInSeconds);
-    Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
-    deadlockMap.put("deadlock", deadlock);
-    return deadlockMap;
+	  new DeadlockGenerator().generateDeadlock();
+      boolean deadlock = isDeadlockAfterPeriod(timeInSeconds);
+      Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
+      deadlockMap.put("deadlock", deadlock);
+      return deadlockMap;
   }
   
-  private static void startDeadlock() {
-    new DeadlockGenerator().generateDeadlock();
-  }
-  
-  private static class DeadlockThread extends TimerTask {
+  /**
+   * An instance of this class checks for number of dead locked threads.
+   *
+   */
+  static class DeadlockThread  {
     
     private final ThreadMXBean bean;
-    
-    private boolean isDeadlock;
-    
+
     DeadlockThread(ThreadMXBean bean) {
       this.bean = bean;
     }
     
-    public boolean isDeadlock() {
-      return isDeadlock;
-    }
-
-    @Override
-    public void run() {
+    /**
+     * Returns the the number of dead locked threads.
+     * @return number of deadloced threads
+     */
+    public int numberOfDeadlockedThreads() {
       long [] deadlockThreadIds = this.bean.findMonitorDeadlockedThreads();
-      this.isDeadlock = deadlockThreadIds != null && deadlockThreadIds.length > 0;
+      return deadlockThreadIds == null ? 0 : deadlockThreadIds.length;
     }
   }
   
@@ -90,12 +82,9 @@ public class Deadlocks {
         public void run() {
           synchronized(firstLockObject) {
             System.out.println("Thread1 on first lock object");
-          }
-          try {
-            Thread.sleep(2000);
-          } catch (InterruptedException e) {}
-          synchronized(secondLockObject) {
-            System.out.println("Thread2 on second lock object");
+            synchronized(secondLockObject) {
+              System.out.println("Thread2 on second lock object");
+            }
           }
         }
       });
@@ -107,12 +96,9 @@ public class Deadlocks {
         public void run() {
           synchronized(secondLockObject) {
             System.out.println("Thread2 on second lock object");
-          }
-          try {
-            Thread.sleep(2000);
-          } catch (InterruptedException e) {}
-          synchronized(firstLockObject) {
-            System.out.println("Thread1 on first lock object");
+            synchronized(firstLockObject) {
+              System.out.println("Thread1 on first lock object");
+            }
           }
         }
       });
