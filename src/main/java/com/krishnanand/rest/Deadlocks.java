@@ -4,6 +4,8 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -21,13 +23,8 @@ public class Deadlocks {
    * @param timeInSeconds time in seconds
    * @return {@code true} if the thread is deadlocked; {@code false} otherwise
    */
-  static boolean isDeadlockAfterPeriod(int timeInSeconds) {
+  static boolean isDeadlockAfterPeriod() {
     ThreadMXBean bean = ManagementFactory.getThreadMXBean();
-    try {
-      TimeUnit.SECONDS.sleep(timeInSeconds);
-    } catch (InterruptedException e) {
-      // Swallow the exception.
-    }
     DeadlockThread dt = new DeadlockThread(bean);
     return dt.numberOfDeadlockedThreads() > 0;
   }
@@ -38,12 +35,18 @@ public class Deadlocks {
    * @param timeInSeconds time in seconds
    * @return {@code true} if deadlock is detected; {@code false} otherwise
    */
-  static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds)  {
-	  new DeadlockGenerator().generateDeadlock();
-      boolean deadlock = isDeadlockAfterPeriod(timeInSeconds);
-      Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
-      deadlockMap.put("deadlock", deadlock);
-      return deadlockMap;
+  static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds) {
+    new DeadlockGenerator().generateDeadlock();
+    final Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
+    new Timer().schedule(new TimerTask() {
+
+      @Override
+      public void run() {
+        deadlockMap.put("deadlock", isDeadlockAfterPeriod());
+      }
+
+    }, timeInSeconds * 1000);
+    return deadlockMap;
   }
   
   /**
@@ -60,7 +63,7 @@ public class Deadlocks {
     
     /**
      * Returns the the number of dead locked threads.
-     * @return number of deadloced threads
+     * @return number of deadlocked threads
      */
     public int numberOfDeadlockedThreads() {
       long [] deadlockThreadIds = this.bean.findMonitorDeadlockedThreads();

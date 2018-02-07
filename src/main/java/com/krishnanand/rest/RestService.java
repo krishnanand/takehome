@@ -1,5 +1,6 @@
 package com.krishnanand.rest;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,11 @@ public class RestService implements IRestService {
    */
   @Override
   public List<User> fetchDataFromExternalService() {
-    return Arrays.asList(this.restTemplate.getForObject(URL, User[].class));
+	User[] users = this.restTemplate.getForObject(URL, User[].class);
+	if (users == null || users.length == 0) {
+		return new ArrayList<>();
+	}
+	return Arrays.asList(users);
   }
 
 }

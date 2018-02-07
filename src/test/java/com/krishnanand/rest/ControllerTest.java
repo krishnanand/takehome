@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -62,9 +63,8 @@ public class ControllerTest {
             andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
     ObjectMapper mapper = new ObjectMapper();
-    ParagraphCount pc = mapper.readValue(response, ParagraphCount.class);
-    List<Map<String, Integer>> wordCount = pc.getWordCount();
-    Assert.assertEquals(wordCount.get(0).get("But"), Integer.valueOf(1));
+    List<Map<String, Integer>> pc = mapper.readValue(response, new TypeReference<List<Map<String, Integer>>>() {});
+    Assert.assertEquals(pc.get(0).get("But"), Integer.valueOf(1));
   }
   
   @Test
@@ -72,7 +72,7 @@ public class ControllerTest {
     MvcResult result = 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/rest/frequentwords").
             contentType(MediaType.APPLICATION_JSON_UTF8)).
-            andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+            andExpect(MockMvcResultMatchers.status().isBadRequest()).andReturn();
     String response = new String(result.getResponse().getContentAsByteArray());
     ObjectMapper mapper = new ObjectMapper();
     ParagraphCount pc =
