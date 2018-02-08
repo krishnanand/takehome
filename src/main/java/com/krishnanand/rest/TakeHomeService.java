@@ -1,11 +1,10 @@
 package com.krishnanand.rest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-
 import org.springframework.stereotype.Component;
 
 /**
@@ -49,15 +48,15 @@ public class TakeHomeService implements ITakeHomeService {
     }
 
     // Aggregating the imports and sorting them.
-    PriorityQueue<ParagraphResponse> pq = new PriorityQueue<>();
+    List<String> pq = new ArrayList<>();
     for (Map.Entry<String, Integer> entry : map.entrySet()) {
-      ParagraphResponse pr = new ParagraphResponse(entry.getKey(), entry.getValue());
-      pq.offer(pr);
+      pq.add(entry.getKey());
     }
+    Collections.sort(pq);
     List<Map<String, Integer>> list = new ArrayList<>();
-    for (ParagraphResponse pr : pq) {
+    for (String word : pq) {
       Map<String, Integer> entryMap = new LinkedHashMap<>();
-      entryMap.put(pr.getText(), pr.getNumberOfOccurrences());
+      entryMap.put(word, map.get(word));
       list.add(entryMap);
     }
     ParagraphCount pc = new ParagraphCount();
