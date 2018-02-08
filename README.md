@@ -61,7 +61,7 @@ Returns a json array of the most frequent words in sorted alphabetical order.
 The sample request is given below
 ```
 {
-    "paragraph": "we had everything before us, we had nothing before us, we were all going direct to Heaven, we were all going direct the other way— in short, the period was so far like the present period, that some of its noisiest authorities insisted on its being received, for good or for evil, in the superlative degree of comparison only."
+    "paragraph": "we had everything before us."
 }
 ```
 
@@ -104,11 +104,14 @@ The example of a successful response is given below
 ]
 ````
 
+
+1) #### The request body is either missing, or has no content associated with `paragraph`.   ####
+
 In case of an error, the response payload will contain the following attribute.
 
 The error response is defined as follows.
 
-● HTTP status code 400 Bad Request
+● HTTP status code 400 (Bad Request)
 
 ● Response Body Properties
 
@@ -118,9 +121,7 @@ The error response is defined as follows.
 | code   | integer    | Http status code  |
 | message | string | user friendly error message|
 
-1) #### The request body is either missing, or has not content by the name of `paragraph`.   ####
-
-In this case, 400 error is returned. The sample response 
+ The sample response 
 
 ````
 {  
@@ -141,10 +142,70 @@ The sample request is given below
 
 | Name | Type | Description |
 | :---         |     :---      | :--- |
-| n  | request param   | number used to determine how many numbers are added to fibonacci sequence |
+| n  | request parameter (integer)  | number used to determine how many numbers are added to fibonacci sequence |
 
 ● Response Body Properties
 
 | Name | Type | Description |
 | :---         |     :---      | :--- |
 || array   | array of fibonacci sequences |
+
+For `n = 10`, the sample output response would be
+
+`[0,1,1,2,3,5,8,13,21,34]`
+
+#### GET /takehome/rest/deadlock ####
+
+The function checks if the deadlock has occurred after specified period of time.
+
+### POST /takehome/person/add
+
+This creates an entity of type `Person` in the database.
+
+The sample request body is given below
+
+| Name | Type | Description | Required|
+| :---         |     :---      | :--- |:--- |
+| firstName | string  | person's first name  |Yes|
+| secondName | string  | person's last name  |Yes|
+
+The example of request body is given below
+
+```
+{
+    "firstName": "John",
+    "lastName": "Doe"
+}
+```
+
+The output returns a unique person identifier associated with the person.
+
+● Response Body Properties
+
+| Name | Type | Description |
+| :---         |     :---      | :--- | 
+|personId| String   | Unique person identifier|
+
+
+The sample response body is
+
+```
+{
+    "personId": "ABCDE12345
+}
+```
+
+1) #### The request body does not contain either first or last name or both, or that the request body is empty. ####
+
+In this case, 400 error is returned. The sample response 
+
+````
+{  
+  "errors":[  
+    {  
+      "code":400,
+      "message":"The input was invalid. Please check if either first name or last name is missing."
+    }
+  ]
+}
+````
