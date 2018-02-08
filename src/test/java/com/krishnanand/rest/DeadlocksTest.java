@@ -61,7 +61,7 @@ public class DeadlocksTest {
     public void $init() {}
 
     @Mock
-    public void generateDeadlock() {
+    public void generateDeadlock(Invocation inv) {
       deadlockCount ++;
     }
   }
@@ -71,9 +71,9 @@ public class DeadlocksTest {
 
     @Mock
     public void $init() {}
-    
+
     @Mock
-    public void schedule(Invocation invocation, TimerTask task, long delay) {
+    public void schedule(TimerTask task, long delay) {
       scheduleCount ++;
     };
   }
