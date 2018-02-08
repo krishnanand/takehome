@@ -2,6 +2,7 @@ package com.krishnanand.rest;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -37,6 +38,11 @@ public class Deadlocks {
    */
   static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds) {
     new DeadlockGenerator().generateDeadlock();
+    try {
+      Thread.sleep(timeInSeconds * 1000);
+    } catch (InterruptedException e) {
+      return Collections.emptyMap();
+    }
     final Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
     new Timer().schedule(new TimerTask() {
 

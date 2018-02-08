@@ -80,6 +80,11 @@ public class DeadlocksTest {
   
   @Test
   public void testStartAndDetectDeadlocks() throws Exception {
+    new Expectations() {
+      {
+        Thread.sleep(0);
+      }
+    };
     DeadlockGeneratorMockUp gen = new DeadlockGeneratorMockUp();
     TimerMockUp tmu = new TimerMockUp();
     Deadlocks.startAndDetectDeadlocks(0);
