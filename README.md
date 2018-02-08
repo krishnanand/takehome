@@ -68,8 +68,9 @@ The sample request is given below
 **Request**
 
 The request body is shown below
+
 | Name | Type | Description|
-| :---         |     :---     |  
+| :---         |     :---     |       :---     |  
 | conent | string   | paragraph |
 
 The example of a successful response is given below
@@ -109,8 +110,6 @@ The error response is defined as follows.
 
 ● HTTP status code 400 Bad Request
 
-but the response body contains error messages
-
 ● Response Body Properties
 
 | Name | Type | Description |
@@ -134,11 +133,9 @@ In this case, 400 error is returned. The sample response
 }
 ````
 
-#### GET /takehome/rest/fibonacci?n=10 ####
+#### GET /takehome/rest/fibonacci ####
 
-The implementation returns an array of fibocci sequene.
-
-The request body payload is defined below.
+The implementation returns an array of fibocci sequences.
 
 The sample request is given below
 
