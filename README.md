@@ -107,7 +107,7 @@ The example of a successful response is given below
 
 1) #### The request body is either missing, or has no content associated with `paragraph`.   ####
 
-In case of an error, the response payload will contain the following attribute.
+In case of an error, the response payload will have the following characeristics.
 
 The error response is defined as follows.
 
@@ -144,8 +144,10 @@ The sample request is given below
 | :---         |     :---      | :--- |
 | n  | request parameter (integer)  | number used to determine how many numbers are added to fibonacci sequence |
 
-● Response Body Properties
+**Response**
 
+● a status code of 200 OK
+● Response Body Properties
 | Name | Type | Description |
 | :---         |     :---      | :--- |
 || array   | array of fibonacci sequences |
@@ -178,14 +180,16 @@ The example of request body is given below
 }
 ```
 
-The output returns a unique person identifier associated with the person.
+** Response **
 
+The response payload returns a unique person identifier associated with the person.
+
+● a status code of 200 OK
 ● Response Body Properties
 
 | Name | Type | Description |
 | :---         |     :---      | :--- | 
 |personId| String   | Unique person identifier|
-
 
 The sample response body is
 
