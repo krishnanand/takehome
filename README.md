@@ -73,12 +73,6 @@ The request body is shown below
 | :---         |     :---     |       :---     |  
 | conent | string   | paragraph |
 
-The example of a successful response is given below
-
-````
-[
- {"But": 9}
-]
 ````
 
 **Response**
