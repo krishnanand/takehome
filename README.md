@@ -71,9 +71,7 @@ The request body is shown below
 
 | Name | Type | Description|
 | :---         |     :---     |       :---     |  
-| conent | string   | paragraph |
-
-````
+| content | string   | paragraph containing the words to be counted |
 
 **Response**
 
@@ -197,7 +195,7 @@ The sample response body is
 
 In this case, 400 error is returned. The sample response 
 
-````
+```
 {  
   "errors":[  
     {  
@@ -206,4 +204,4 @@ In this case, 400 error is returned. The sample response
     }
   ]
 }
-````
+```
