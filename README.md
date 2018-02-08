@@ -97,7 +97,7 @@ The example of a successful response is given below
 ````
 
 
-1) #### The request body is either missing, or has no content associated with `paragraph`.   ####
+1) #### The request body is either missing, or has no content associated with paragraph. ####
 
 In case of an error, the response payload will have the following characeristics.
 
