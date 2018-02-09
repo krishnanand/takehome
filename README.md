@@ -160,7 +160,7 @@ For `n = 10`, the sample output response would be
 #### GET /takehome/rest/deadlock ####
 
 ```
-curl -XGET 'http://localhost:8080/takehome/rest/deadlock?timeInSeconds=15
+curl -XGET 'http://localhost:8080/takehome/rest/deadlock?timeInSeconds=15'
 ```
 
 The function checks if the deadlock has occurred after specified period of time.
