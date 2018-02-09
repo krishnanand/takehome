@@ -34,7 +34,6 @@ Following are the list of endpoints supported the restful application
 
 Returns "Hello World" as string response.
 
-
 **Response**
 
 A success response will include:
@@ -199,7 +198,7 @@ The example of request body is given below
 
 The response payload returns a unique person identifier associated with the person.
 
-● a status code of 200 OK
+● a status code of 201 Created
 ● Response Body Properties
 
 | Name | Type | Description |
@@ -350,4 +349,37 @@ In this case, 400 error is returned. The sample response
     }
   ]
 }
+```
+
+#### GET /takehome/service/get ####
+
+The function checks if the deadlock has occurred after specified period of time.
+
+
+**Response**
+
+● a status code of 200 OK
+
+● Response Body Properties
+
+| Name | Type | Description |
+| :---         |     :---      | :--- |
+| id   | long | identifier|
+| userId   | long | user identifier|
+| title   | string | title string|
+| body   | string | body string|
+
+
+
+The sample response is given below
+
+```
+   [
+   {
+    "userId": 1,
+    "id": 1,
+    "title": "title text",
+    "body": "body text"
+  }
+  ]
 ```
