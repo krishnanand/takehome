@@ -33,7 +33,7 @@ Following are the list of endpoints supported the restful application
 #### GET /takehome/rest/helloword ####
 
 ```
- curl -XGET 'http://localhost:8080/takehome/rest/helloworld
+ curl -XGET 'http://localhost:8080/takehome/rest/helloworld'
 ```
 Returns "Hello World" as string response.
 
