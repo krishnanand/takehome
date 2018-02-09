@@ -239,13 +239,12 @@ The sample request body is given below
 | :---         |     :---      | :--- |:--- |
 | personId | string (request parameter)  | unique person identifier  |Yes|
 
-
-
 **Response**
 
-The response payload returns a unique person identifier associated with the person.
+The response payload returns a unique person entity.
 
 ● a status code of 200 OK
+
 ● Response Body Properties
 
 The example of request body is given below
@@ -293,4 +292,62 @@ In this case, 400 error is returned. The sample response
 ```
 
 
+### DELETE /takehome/person/delete
 
+Returns an entity of type `Person` from the database.
+
+The sample request body is given below
+
+| Name | Type | Description | Required|
+| :---         |     :---      | :--- |:--- |
+| personId | string (request parameter)  | unique person identifier  |Yes|
+
+**Response**
+
+The response payload returns the success of the operation.
+
+● a status code of 200 OK
+
+● Response Body Properties
+
+The example of request body is given below
+
+| Name | Type | Description |
+| :---         |     :---      | :--- |
+| success | boolean  | if true, then it indicates that the entity was deleted  |
+
+```
+{
+    "success": true
+}
+```
+
+1) #### The request parameter ```personId``` does not exist. ####
+
+In this case, 400 error is returned. The sample response 
+
+```
+{  
+  "errors":[  
+    {  
+      "code":400,
+      "message":"The input was invalid. Please recheck input."
+    }
+  ]
+}
+```
+
+2) #### `Person` entity does not exist for the unique person identifier. ####
+
+In this case, 400 error is returned. The sample response 
+
+```
+{  
+  "errors":[  
+    {  
+      "code":400,
+      "message":"No record was found for the input."
+    }
+  ]
+}
+```
