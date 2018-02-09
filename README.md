@@ -152,6 +152,29 @@ For `n = 10`, the sample output response would be
 
 The function checks if the deadlock has occurred after specified period of time.
 
+
+The sample request is given below
+
+| Name | Type | Description |
+| :---         |     :---      | :--- |
+| timeInSeconds  | request parameter (integer)  | Time after which the deadlock is to be checked |
+
+**Response**
+
+● a status code of 200 OK
+
+● Response Body Properties
+
+| Name | Type | Description |
+| :---         |     :---      | :--- |
+| deadlock   | boolean | If true, then it suggests that the deadlock has occurred and vice versa|
+
+The sample response is given below
+
+```
+  {'deadlock': true}
+```
+
 ### POST /takehome/person/add
 
 This creates an entity of type `Person` in the database.
@@ -172,7 +195,7 @@ The example of request body is given below
 }
 ```
 
-** Response **
+**Response**
 
 The response payload returns a unique person identifier associated with the person.
 
@@ -205,3 +228,69 @@ In this case, 400 error is returned. The sample response
   ]
 }
 ```
+
+### GET /takehome/person/get
+
+Returns an entity of type `Person` from the database.
+
+The sample request body is given below
+
+| Name | Type | Description | Required|
+| :---         |     :---      | :--- |:--- |
+| personId | string (request parameter)  | unique person identifier  |Yes|
+
+
+
+**Response**
+
+The response payload returns a unique person identifier associated with the person.
+
+● a status code of 200 OK
+● Response Body Properties
+
+The example of request body is given below
+
+| Name | Type | Description |
+| :---         |     :---      | :--- |
+| firstName | string  | person's first name  |
+| secondName | string  | person's last name  |
+
+```
+{
+    "firstName": "John",
+    "lastName": "Doe"
+}
+```
+
+1) #### The request parameter ```personId``` does not exist. ####
+
+In this case, 400 error is returned. The sample response 
+
+```
+{  
+  "errors":[  
+    {  
+      "code":400,
+      "message":"The input was invalid. Please recheck input."
+    }
+  ]
+}
+```
+
+2) #### `Person` entity does not exist for the unique person identifier. ####
+
+In this case, 400 error is returned. The sample response 
+
+```
+{  
+  "errors":[  
+    {  
+      "code":400,
+      "message":"No record was found for the input."
+    }
+  ]
+}
+```
+
+
+
