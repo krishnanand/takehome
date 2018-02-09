@@ -2,15 +2,12 @@ package com.krishnanand.rest;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import com.krishnanand.rest.Deadlocks.DeadlockGenerator;
 import mockit.Expectations;
-import mockit.Invocation;
 import mockit.Mock;
 import mockit.MockUp;
 import mockit.Mocked;
@@ -61,35 +58,21 @@ public class DeadlocksTest {
     public void $init() {}
 
     @Mock
-    public void generateDeadlock(Invocation inv) {
+    public void generateDeadlock() {
       deadlockCount ++;
     }
   }
   
-  class TimerMockUp extends MockUp<Timer> {
-    int scheduleCount = 0;
-
-    @Mock
-    public void $init() {}
-
-    @Mock
-    public void schedule(TimerTask task, long delay) {
-      scheduleCount ++;
-    };
-  }
-  
   @Test
-  public void testStartAndDetectDeadlocks() throws Exception {
+  public void testStartAndDetectDeadlocks(@Mocked final Thread thread) throws Exception {
     new Expectations() {
       {
         Thread.sleep(0);
       }
     };
     DeadlockGeneratorMockUp gen = new DeadlockGeneratorMockUp();
-    TimerMockUp tmu = new TimerMockUp();
     Deadlocks.startAndDetectDeadlocks(0);
     Assert.assertEquals(1, gen.deadlockCount);
-    Assert.assertEquals(1, tmu.scheduleCount);
   }
 
 }

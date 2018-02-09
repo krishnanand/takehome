@@ -5,8 +5,6 @@ import java.lang.management.ThreadMXBean;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,21 +36,15 @@ public class Deadlocks {
    */
   static Map<String, Boolean> startAndDetectDeadlocks(int timeInSeconds) {
     new DeadlockGenerator().generateDeadlock();
+    final Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
     try {
       Thread.sleep(timeInSeconds * 1000);
+      deadlockMap.put("deadlock", isDeadlockAfterPeriod());
+      return deadlockMap;
     } catch (InterruptedException e) {
       return Collections.emptyMap();
     }
-    final Map<String, Boolean> deadlockMap = new LinkedHashMap<>();
-    new Timer().schedule(new TimerTask() {
-
-      @Override
-      public void run() {
-        deadlockMap.put("deadlock", isDeadlockAfterPeriod());
-      }
-
-    }, timeInSeconds * 1000);
-    return deadlockMap;
+    
   }
   
   /**
