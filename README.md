@@ -338,13 +338,13 @@ In this case, 400 error is returned. The sample response
 
 2) #### `Person` entity does not exist for the unique person identifier. ####
 
-In this case, 400 error is returned. The sample response 
+In this case, 404 error is returned. The sample response 
 
 ```
 {  
   "errors":[  
     {  
-      "code":400,
+      "code":404,
       "message":"No record was found for the input."
     }
   ]
