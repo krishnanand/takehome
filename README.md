@@ -228,7 +228,7 @@ In this case, 400 error is returned. The sample response
 }
 ```
 
-### GET /takehome/person/get
+### GET /takehome/person/{personId}
 
 Returns an entity of type `Person` from the database.
 
@@ -236,7 +236,7 @@ The sample request body is given below
 
 | Name | Type | Description | Required|
 | :---         |     :---      | :--- |:--- |
-| personId | string (request parameter)  | unique person identifier  |Yes|
+| personId | string (path variable)  | unique person identifier  |Yes|
 
 **Response**
 
@@ -260,22 +260,7 @@ The example of request body is given below
 }
 ```
 
-1) #### The request parameter ```personId``` does not exist. ####
-
-In this case, 400 error is returned. The sample response 
-
-```
-{  
-  "errors":[  
-    {  
-      "code":400,
-      "message":"The input was invalid. Please recheck input."
-    }
-  ]
-}
-```
-
-2) #### `Person` entity does not exist for the unique person identifier. ####
+1) #### `Person` entity does not exist for the unique person identifier. ####
 
 In this case, 404 error is returned. The sample response 
 
@@ -291,7 +276,7 @@ In this case, 404 error is returned. The sample response
 ```
 
 
-### DELETE /takehome/person/delete
+### DELETE /takehome/person/{personId}
 
 Returns an entity of type `Person` from the database.
 
@@ -299,7 +284,7 @@ The sample request body is given below
 
 | Name | Type | Description | Required|
 | :---         |     :---      | :--- |:--- |
-| personId | string (request parameter)  | unique person identifier  |Yes|
+| personId | string (path variable)  | unique person identifier  |Yes|
 
 **Response**
 
@@ -321,22 +306,7 @@ The example of request body is given below
 }
 ```
 
-1) #### The request parameter ```personId``` does not exist. ####
-
-In this case, 400 error is returned. The sample response 
-
-```
-{  
-  "errors":[  
-    {  
-      "code":400,
-      "message":"The input was invalid. Please recheck input."
-    }
-  ]
-}
-```
-
-2) #### `Person` entity does not exist for the unique person identifier. ####
+1) #### `Person` entity does not exist for the unique person identifier. ####
 
 In this case, 404 error is returned. The sample response 
 
