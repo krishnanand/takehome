@@ -32,6 +32,9 @@ Following are the list of endpoints supported the restful application
 
 #### GET /takehome/rest/helloword ####
 
+```
+ curl -XGET 'http://localhost:8080/takehome/rest/helloworld
+```
 Returns "Hello World" as string response.
 
 **Response**
@@ -43,13 +46,17 @@ A success response will include:
 
 The sample response is given below
 
-````
+```
 Hello World
-````
+```
 
 #### GET /takehome/rest/frequentwords ####
 
 Returns a json array of the most frequent words in sorted alphabetical order.
+
+```
+curl -XGET -H "Content-type: application/json; charset=UTF-8" -d '{"paragraph": "Here we are"}' 'http://localhost:8080/takehome/rest/frequentwords'
+```
 
 **Request**
 
@@ -62,7 +69,6 @@ The sample request is given below
 {
     "paragraph": "we had everything before us."
 }
-```
 
 **Request**
 
@@ -127,6 +133,10 @@ The error response is defined as follows.
 
 #### GET /takehome/rest/fibonacci ####
 
+```
+curl -XGET 'http://localhost:8080/takehome/rest/fibonacci?n=10'
+```
+
 The implementation returns an array of fibocci sequences.
 
 The sample request is given below
@@ -148,6 +158,10 @@ For `n = 10`, the sample output response would be
 `[0,1,1,2,3,5,8,13,21,34]`
 
 #### GET /takehome/rest/deadlock ####
+
+```
+curl -XGET 'http://localhost:8080/takehome/rest/deadlock
+```
 
 The function checks if the deadlock has occurred after specified period of time.
 
@@ -175,6 +189,10 @@ The sample response is given below
 ```
 
 ### POST /takehome/person/add
+
+```
+curl -XPOST -H "Content-type: application/json; charset=UTF-8" -d '{"firstName": "John", "lastName": "Doe"}' 'http://localhost:8080/takehome/person/'
+```
 
 This creates an entity of type `Person` in the database.
 
@@ -230,6 +248,10 @@ In this case, 400 error is returned. The sample response
 
 ### GET /takehome/person/{personId}
 
+```
+curl -XGET 'http://localhost:8080/takehome/person/{personId}'
+```
+
 Returns an entity of type `Person` from the database.
 
 The sample request body is given below
@@ -278,6 +300,10 @@ In this case, 404 error is returned. The sample response
 
 ### DELETE /takehome/person/{personId}
 
+```
+curl -XDELETE 'http://localhost:8080/takehome/person/{personId}'
+```
+
 Returns an entity of type `Person` from the database.
 
 The sample request body is given below
@@ -322,6 +348,10 @@ In this case, 404 error is returned. The sample response
 ```
 
 #### GET /takehome/service/get ####
+
+```
+curl -XGET 'http://localhost:8080/takehome/service/get'
+```
 
 The function checks if the deadlock has occurred after specified period of time.
 
